@@ -1,0 +1,599 @@
+// Import Tabler pre-compiled CSS
+@import "@tabler/core/dist/css/tabler.min.css";
+
+// Custom SCSS - Tabler overrides and game-specific styles
+
+// Game-specific variables
+$decay-running: #2fb344;
+$decay-wear: #f59f00;
+$decay-warning: #f76707;
+$decay-critical: #d63939;
+$decay-halted: #6c757d;
+
+// Base overrides
+body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Loading screen
+#loading {
+  background: var(--tblr-bg-surface);
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+// Currency bar at top
+.currency-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background: var(--tblr-bg-surface);
+  border-bottom: 1px solid var(--tblr-border-color);
+  padding: 0.5rem 0;
+  
+  .currency-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    
+    .currency-icon {
+      font-size: 1rem;
+    }
+    
+    &.currency-cash .currency-value {
+      color: $decay-running;
+    }
+    
+    &.currency-gems .currency-value {
+      color: #ae3ec9;
+    }
+    
+    &.currency-energy .currency-value {
+      color: #4dabf7;
+    }
+  }
+}
+
+// Industry cards
+.industry-card {
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &[data-status="running"] {
+    border-color: rgba($decay-running, 0.3);
+    
+    .status-indicator {
+      color: $decay-running;
+    }
+  }
+  
+  &[data-status="wear"] {
+    border-color: rgba($decay-wear, 0.3);
+    
+    .status-indicator {
+      color: $decay-wear;
+    }
+  }
+  
+  &[data-status="warning"] {
+    border-color: rgba($decay-warning, 0.3);
+    animation: pulse-warning 2s infinite;
+    
+    .status-indicator {
+      color: $decay-warning;
+    }
+  }
+  
+  &[data-status="critical"] {
+    border-color: rgba($decay-critical, 0.5);
+    animation: pulse-critical 1s infinite;
+    
+    .status-indicator {
+      color: $decay-critical;
+    }
+  }
+  
+  &[data-status="halted"] {
+    opacity: 0.7;
+    filter: grayscale(50%);
+    
+    .status-indicator {
+      color: $decay-halted;
+    }
+  }
+  
+  .industry-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+  
+  .industry-level {
+    font-size: 0.75rem;
+    background: var(--tblr-primary);
+    color: white;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+  }
+  
+  .stability-bar-container {
+    height: 6px;
+    background: var(--tblr-border-color);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  
+  .stability-bar {
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 3px;
+  }
+  
+  &[data-status="running"] .stability-bar {
+    background: $decay-running;
+  }
+  
+  &[data-status="wear"] .stability-bar {
+    background: $decay-wear;
+  }
+  
+  &[data-status="warning"] .stability-bar {
+    background: $decay-warning;
+  }
+  
+  &[data-status="critical"] .stability-bar {
+    background: $decay-critical;
+  }
+  
+  &[data-status="halted"] .stability-bar {
+    background: $decay-halted;
+  }
+  
+  .pending-earnings {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $decay-running;
+  }
+  
+  .upgrade-cost {
+    font-size: 0.75rem;
+    color: var(--tblr-muted);
+  }
+}
+
+// Locked industry card
+.industry-card-locked {
+  opacity: 0.6;
+  background: var(--tblr-bg-surface-secondary);
+  
+  .unlock-cost {
+    font-weight: 600;
+  }
+}
+
+// Floating number animations
+.floating-number {
+  position: fixed;
+  pointer-events: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: $decay-running;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: float-up 1.5s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.2);
+  }
+}
+
+// Critical number (for crits)
+.floating-number-crit {
+  color: #f59f00;
+  font-size: 1.75rem;
+  animation: float-up-crit 2s ease-out forwards;
+}
+
+@keyframes float-up-crit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.2);
+  }
+}
+
+// Pulse animations
+@keyframes pulse-warning {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba($decay-warning, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba($decay-warning, 0);
+  }
+}
+
+@keyframes pulse-critical {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba($decay-critical, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba($decay-critical, 0);
+  }
+}
+
+// Bottom navigation
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--tblr-bg-surface);
+  border-top: 1px solid var(--tblr-border-color);
+  z-index: 1030;
+  padding-bottom: env(safe-area-inset-bottom);
+  
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem;
+      color: var(--tblr-muted);
+      font-size: 0.75rem;
+      position: relative;
+      
+      .nav-icon {
+        font-size: 1.25rem;
+        margin-bottom: 0.125rem;
+      }
+      
+      &.active {
+        color: var(--tblr-primary);
+      }
+      
+      // Red dot badge
+      .badge-dot {
+        position: absolute;
+        top: 0.25rem;
+        right: calc(50% - 1rem);
+        width: 8px;
+        height: 8px;
+        background: $decay-critical;
+        border-radius: 50%;
+        animation: pulse-dot 2s infinite;
+      }
+    }
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+// Page content padding for bottom nav
+.page-content {
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
+}
+
+// Spin wheel
+.wheel-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  
+  .wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      #ff6b6b 0deg 40deg,
+      #feca57 40deg 80deg,
+      #48dbfb 80deg 120deg,
+      #ff9ff3 120deg 160deg,
+      #54a0ff 160deg 200deg,
+      #5f27cd 200deg 240deg,
+      #00d2d3 240deg 280deg,
+      #ff6b6b 280deg 320deg,
+      #feca57 320deg 360deg
+    );
+    border: 4px solid var(--tblr-border-color);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  }
+  
+  .wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 25px solid var(--tblr-primary);
+    z-index: 10;
+  }
+  
+  .wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--tblr-bg-surface);
+    border: 3px solid var(--tblr-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    &:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+  }
+}
+
+// Prestige perk tree
+.perk-tree {
+  .perk-node {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &.locked {
+      background: var(--tblr-bg-surface-secondary);
+      border: 2px dashed var(--tblr-border-color);
+      opacity: 0.5;
+    }
+    
+    &.available {
+      background: var(--tblr-bg-surface);
+      border: 2px solid var(--tblr-primary);
+      animation: pulse-available 2s infinite;
+    }
+    
+    &.unlocked {
+      background: var(--tblr-primary);
+      color: white;
+      border: 2px solid var(--tblr-primary);
+    }
+    
+    &:hover:not(.locked) {
+      transform: scale(1.1);
+    }
+  }
+}
+
+@keyframes pulse-available {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(var(--tblr-primary-rgb), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(var(--tblr-primary-rgb), 0);
+  }
+}
+
+// Shop items
+.shop-item {
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .shop-item-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--tblr-primary);
+  }
+  
+  .shop-item-value {
+    font-size: 0.75rem;
+    color: $decay-running;
+    text-decoration: line-through;
+  }
+}
+
+// Daily rewards calendar
+.daily-reward {
+  width: 60px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: var(--tblr-bg-surface-secondary);
+  border: 2px solid var(--tblr-border-color);
+  transition: all 0.2s;
+  
+  &.claimed {
+    background: rgba($decay-running, 0.2);
+    border-color: $decay-running;
+    
+    .daily-reward-icon::after {
+      content: "✓";
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: $decay-running;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  
+  &.available {
+    border-color: var(--tblr-primary);
+    animation: pulse-available 2s infinite;
+    cursor: pointer;
+  }
+  
+  &.locked {
+    opacity: 0.5;
+  }
+  
+  .daily-reward-day {
+    font-size: 0.65rem;
+    color: var(--tblr-muted);
+  }
+  
+  .daily-reward-icon {
+    font-size: 1.25rem;
+    position: relative;
+  }
+  
+  .daily-reward-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+  }
+}
+
+// Toast notifications
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+}
+
+// Confetti (simple CSS version)
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+// Admin panel styles
+.admin-panel {
+  .admin-sidebar {
+    min-height: 100vh;
+    background: var(--tblr-bg-surface-secondary);
+  }
+  
+  .admin-stat-card {
+    transition: all 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Utility classes
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.user-select-none {
+  user-select: none;
+}
+
+// Mobile optimizations
+@media (max-width: 576px) {
+  .currency-bar {
+    .currency-item {
+      font-size: 0.75rem;
+      
+      .currency-icon {
+        font-size: 0.875rem;
+      }
+    }
+  }
+  
+  .industry-card {
+    .industry-icon {
+      font-size: 1.5rem;
+    }
+    
+    .pending-earnings {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

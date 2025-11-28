@@ -355,47 +355,93 @@ public class GameHub : Hub
 
 ### Implementation Phases
 
-#### Phase 1A: Foundation (Week 1)
-- [ ] Project scaffolding (Vite + .NET)
-- [ ] FluentMigrator setup + initial schema
-- [ ] Basic Tabler layout shell
-- [ ] Player creation (anonymous UUID)
-- [ ] Industry definitions seeded
+#### Phase 1A: Foundation (Week 1) ✅ COMPLETE
+- [x] Project scaffolding (Vite + .NET)
+- [x] FluentMigrator setup + initial schema
+- [x] Basic Tabler layout shell
+- [x] Player creation (anonymous UUID)
+- [x] Industry definitions seeded
 
-#### Phase 1B: Core Loop (Week 2)
-- [ ] Industry cards with Tabler
-- [ ] Upgrade/collect/repair actions
-- [ ] Decay calculation (client + server)
-- [ ] Currency display + transactions
-- [ ] localStorage state persistence
+#### Phase 1B: Core Loop (Week 2) ✅ COMPLETE
+- [x] Industry cards with Tabler
+- [x] Upgrade/collect/repair actions
+- [x] Decay calculation (client + server)
+- [x] Currency display + transactions
+- [x] localStorage state persistence
 
-#### Phase 1C: Offline PWA (Week 3)
-- [ ] Service Worker registration
-- [ ] Offline action queue
-- [ ] Sync on reconnect
-- [ ] PWA manifest + install prompt
+#### Phase 1C: Offline PWA (Week 3) 🔄 IN PROGRESS
+- [x] Service Worker registration
+- [x] Offline action queue
+- [x] Sync on reconnect
+- [x] PWA manifest + install prompt
 - [ ] Background sync API
 
-#### Phase 1D: Progression (Week 4)
+#### Phase 1D: Progression (Week 4) ⏳ PENDING
 - [ ] Prestige system + EP calculation
 - [ ] Perk tree UI (3 branches)
 - [ ] Leaderboard display
 - [ ] Daily rewards calendar
 - [ ] Daily spin wheel
 
-#### Phase 1E: Polish (Week 5)
+#### Phase 1E: Polish (Week 5) ⏳ PENDING
 - [ ] Number animations (jQuery)
 - [ ] Red dot badge system
 - [ ] Sound effects (optional)
 - [ ] Mock shop with bundles
 - [ ] Admin panel basics
 
-#### Phase 1F: Testing & Deploy (Week 6)
+#### Phase 1F: Testing & Deploy (Week 6) ⏳ PENDING
 - [ ] Playwright E2E test suite
 - [ ] Performance optimization
 - [ ] Deploy script (SSH)
 - [ ] Production config
 - [ ] Documentation
+
+---
+
+### Current Progress (Updated: 2025-11-28)
+
+#### ✅ Completed
+
+**Frontend:**
+- Vite + TypeScript + Tabler project setup
+- Game engine with tick/collect/upgrade/prestige/decay logic
+- State management with localStorage persistence
+- API service aligned with backend endpoints
+- Home page with industry cards
+- Currency bar, navigation tabs
+- PWA manifest and service worker
+- Offline sync manager
+- Number formatting utilities
+
+**Backend:**
+- .NET 8 Web API project (port 5001)
+- SQLite database with Dapper
+- FluentMigrator with initial schema
+- Models: Player, PlayerIndustry, GameEvent
+- Repository: PlayerRepository
+- Service: GameService (get/create player, sync, leaderboard, wheel, prestige)
+- Controller: GameController (state, sync, leaderboard, spin, prestige endpoints)
+- CORS configured for localhost:3000
+
+**Integration:**
+- Frontend ↔ Backend sync working
+- Player creation on first visit
+- Leaderboard API returning data
+- Health check endpoint functional
+
+#### 🔄 Running Services
+
+| Service | URL | Status |
+|---------|-----|--------|
+| Frontend | http://localhost:3000 | ✅ Running |
+| Backend | http://localhost:5001 | ✅ Running |
+| Database | busyness.db | ✅ Created |
+
+#### 🐛 Known Issues
+
+1. **Icon manifest error** - PWA icon not found at `/icons/icon-192x192.png`
+2. **Sync timing** - First sync may fail if backend starts after frontend load
 
 ---
 
@@ -553,3 +599,135 @@ test('offline actions sync on reconnect', async ({ page, context }) => {
 3. Begin Phase 1A: Foundation
 
 Ready to proceed?
+
+---
+
+## 🚀 Next Instruction Plan (Phase 1D: Progression)
+
+### Priority 1: Fix PWA Icons
+Create proper app icons for the PWA manifest.
+
+```bash
+# Create icon files
+frontend/public/icons/icon-192x192.png
+frontend/public/icons/icon-512x512.png
+```
+
+### Priority 2: Prestige Page UI
+Create the prestige page with perk tree visualization.
+
+**Files to create:**
+- `frontend/src/pages/prestige.ts` - Prestige page with EP preview and perk tree
+- `frontend/src/components/perk-tree.ts` - Visual perk tree component
+
+**Features:**
+- Show current EP and prestige multiplier
+- EP preview calculation (based on total earnings)
+- Perk tree with 3 branches (Efficiency, Core, Resilience)
+- Prestige button with confirmation
+
+### Priority 3: Wheel Page UI
+Create the daily wheel spin page.
+
+**Files to create:**
+- `frontend/src/pages/wheel.ts` - Wheel spin page
+- `frontend/src/components/wheel.ts` - Animated spin wheel
+
+**Features:**
+- Visual wheel with segments (Common, Uncommon, Rare, Epic, Legendary)
+- Spin animation with jQuery
+- Daily spin timer
+- Pity counter display
+- Connect to `/api/game/spin/{playerId}` endpoint
+
+### Priority 4: Leaderboard Page UI
+Create the leaderboard/ranks page.
+
+**Files to create:**
+- `frontend/src/pages/ranks.ts` - Leaderboard page
+
+**Features:**
+- Top 100 players list
+- Highlight current player's rank
+- Display total earnings and prestige count
+- Connect to `/api/game/leaderboard` endpoint
+
+### Priority 5: Shop Page UI (Mocked)
+Create the shop page with mock purchases.
+
+**Files to create:**
+- `frontend/src/pages/shop.ts` - Shop page
+
+**Features:**
+- Currency bundles (Gems, Energy)
+- Boosts section (time-limited)
+- Starter packs
+- All purchases mocked (add to player state)
+
+### Priority 6: Navigation Integration
+Update navigation to route between pages.
+
+**Update:**
+- `frontend/src/pages/home.ts` - Add page routing
+- `frontend/src/main.ts` - Page state management
+
+### Priority 7: Backend Enhancements
+Add missing backend functionality.
+
+**Files to create/update:**
+- `backend/Controllers/ShopController.cs` - Mock shop endpoints
+- `backend/Controllers/AdminController.cs` - Admin panel endpoints
+
+### Priority 8: E2E Test Setup
+Initialize Playwright test project.
+
+**Files to create:**
+- `e2e/package.json`
+- `e2e/playwright.config.ts`
+- `e2e/tests/first-session.spec.ts`
+
+---
+
+### Quick Commands
+
+```bash
+# Start frontend
+cd frontend && npm run dev
+
+# Start backend
+cd backend/BusynessTycoon.Api && dotnet run
+
+# Build frontend
+cd frontend && npm run build
+
+# Run backend in background
+cd backend/BusynessTycoon.Api && nohup dotnet run > dotnet.log 2>&1 &
+```
+
+---
+
+### File Summary
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `frontend/src/main.ts` | Entry point | ✅ Done |
+| `frontend/src/game/engine.ts` | Game logic | ✅ Done |
+| `frontend/src/game/state.ts` | State management | ✅ Done |
+| `frontend/src/game/constants.ts` | Game balance | ✅ Done |
+| `frontend/src/game/sync.ts` | Offline sync | ✅ Done |
+| `frontend/src/pages/home.ts` | Main dashboard | ✅ Done |
+| `frontend/src/pages/prestige.ts` | Prestige page | ⏳ TODO |
+| `frontend/src/pages/wheel.ts` | Wheel page | ⏳ TODO |
+| `frontend/src/pages/ranks.ts` | Leaderboard | ⏳ TODO |
+| `frontend/src/pages/shop.ts` | Shop page | ⏳ TODO |
+| `frontend/src/components/industry-card.ts` | Industry UI | ✅ Done |
+| `frontend/src/components/perk-tree.ts` | Perk visualization | ⏳ TODO |
+| `frontend/src/components/wheel.ts` | Spin wheel | ⏳ TODO |
+| `frontend/src/services/api.ts` | REST client | ✅ Done |
+| `frontend/src/services/storage.ts` | localStorage | ✅ Done |
+| `backend/Controllers/GameController.cs` | Game API | ✅ Done |
+| `backend/Controllers/ShopController.cs` | Shop API | ⏳ TODO |
+| `backend/Controllers/AdminController.cs` | Admin API | ⏳ TODO |
+| `backend/Services/GameService.cs` | Business logic | ✅ Done |
+| `backend/Repositories/PlayerRepository.cs` | Data access | ✅ Done |
+| `backend/Migrations/20241128001_InitialCreate.cs` | DB schema | ✅ Done |
